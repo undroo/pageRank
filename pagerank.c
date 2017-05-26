@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <readData.h>
 
+#include "readData.h"
+#include "graph.h"
 /*
 #include inverted.c
 #include searchPagerank.c

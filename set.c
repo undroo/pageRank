@@ -1,5 +1,12 @@
 //Set functions
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
+#include "set.h"
+
+
 typedef  struct Node *list;
 
 typedef struct Node {
@@ -35,10 +42,23 @@ void insertInto(Set S, char *string)
 	if (S->first != NULL){
 		
 	} else {
-		list new = newNode
 	}
 	
 }
+
+void freeSet(Set S)
+{
+	if (s == NULL) return;
+	list next, curr = s->urlList;
+	while (curr != NULL) {
+		next = curr->next;
+		free(curr->urlName);
+		free(curr);	
+		curr = next;
+	}
+	free(S->first);
+}
+
 
 //Helper Functions
 

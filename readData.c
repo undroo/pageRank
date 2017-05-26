@@ -19,6 +19,15 @@ int main(int argc, char **argv)
 	char urlBuffer[BUFFSIZE];
 	char wordBuffer[BUFFSIZE];
 	
+	
+	Set *url;
+	url = newSet();
+	if (fscanf(fp, "%s", buff) != 0){
+		
+	}
+	
+	
+	
 	return 0;
 }
 
