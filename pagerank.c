@@ -2,7 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <assert.h>
+#include <readData.h>
 
 /*
 #include inverted.c
@@ -16,10 +17,7 @@
 
 int main(int argc, char **argv){
 	
-	FILE *fp;
-	fp = fopen(collection.txt, "r");
-	char urlBuffer[BUFFSIZE];
-	char wordBuffer[BUFFSIZE];
+	
 	
 	
 	
