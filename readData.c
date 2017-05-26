@@ -11,6 +11,7 @@
 #include "pagerank.c"
 */
 #include "set.h"
+#include "graph.h"
 
 int main(int argc, char **argv)
 {
@@ -21,9 +22,9 @@ int main(int argc, char **argv)
 	
 	
 	Set *url;
-	url = newSet();
-	if (fscanf(fp, "%s", buff) != 0){
-		
+	urlList = newSet();
+	while (fscanf(fp, "%s", urlBuffer) != 0){
+		insertInto(urlList, urlBuffer);
 	}
 	
 	
