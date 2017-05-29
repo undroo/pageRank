@@ -119,26 +119,25 @@ int  nAdjList(AdjList al)
 
 // showAdjList(AdjList)
 // - display Adjancency List
-void showAdjList(AdjList al)
+void showAdjList(FILE * ptr, AdjList al)
 {	
 	if (al->nitems == 0)
-		printf("No words\n");
+		fprintf(ptr, "No words\n");
 	else
 	{
 		Item curr;
 		curr = al->items;
 		while (curr != NULL)
 		{
-			printf( "%s ", curr->word );
+			fprintf(ptr, "%s ", curr->word );
 			int n;
 			for (n = 0; n < nElems(curr->urls); n++)
-			    printf( "%s ", getValue(curr->urls,n));
+			    fprintf(ptr, "%s ", getValue(curr->urls,n));
 			curr = curr->next;
-			printf( "\n" );
+			fprintf(ptr, "\n" );
 		}
 	}
 }
-
 // Helper functions
 
 static Item newNode(char *str)
