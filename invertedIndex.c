@@ -6,109 +6,91 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <ctype.h>
 #include "invertedIndex.h"
-#include "set.c"
-#include "readData.h"
+#include "set.h"
+#include "adjlist.h"
 
-#define BUFFSIZE 1024
+#define BUFSIZE 1024
 
-/*
+AdjList GetInvertedList(Set);
+Set GetCollection();
+char *normalise(char *);
 
-FUNCTIONS THAT ARE REQUIRED:
-
-local:
-    - normalise words
-    - print inverted list
-
-set.c:
-    - getValue
-    - insertAlphabetically
-    - isInList
-    
-adjacency list:
-    - newAdjList
-    - findNode
-    
-readData.c:
-    - findSection
-
-*/
-
-typedef struct AdjListNode *ALNode;
-
-typedef struct AdjListNode {
-    char *word;
-    Set urls;
-    ALNode next;
-} AdjListNode;
-
-typedef struct AdjListRep {
-    int nitems;
-    ALNode items;
-} AdjListRep;
-
-// Function signatures
-
-void GetInvertedList(Set);
-void normalise(char *)
-
-static ALNode findNode(AList, char *);
-
-
-// Local functions
-
-void GetInvertedList(Set listOfURLs) {
-    char *url
-    char word[BUFFSIZE];
-    FILE *ptr;
-    node wordNode;
-    
-    AList invertedIndex = newAdjList();
-    
-    for (int n = 0; n < nElems(listOfURLs); n++)
-    {
-        url = getValue(URLs,n);
-        ptr = fopen(url, "r");
-        
-        ptr = findSection(2); // skip to section 2
-        
-        while (!feof(ptr))
-        {
-            fscanf (ptr, "%s", BUFFSIZE, word);
-            if ((wordNode = findNode(invertedIndex,normalise(word))) != NULL)
-            {
-                if(isInList(
-                
-
-
-// Helper functions
-
-// normalise(char *)
-// - transform characters into lowercase
-char *normalise(char *word)
+int main()
 {
-    char *curr;
-    for (curr = word; *curr!='\0'; curr++)
-        *curr = tolower(*curr);
-    return word;
+    Set s = GetCollection();
+    AdjList al = GetInvertedList(s);
+    
+    FILE * ptr = fopen("invertedIndex.txt", "w");
+    showAdjList(ptr,al);
+    
+    fclose(ptr);
+    disposeSet(s);
+    disposeAdjList(al);
+    
+    return 0;
 }
-
-// findNode(AList,char *)
-// - find node in List that contains value W
-// - return node containing W
-// - if no node found, return null
-static ALNode findNode(AList list, char *w)
-{
-    ALNode curr;
     
-    for (curr = list->items; curr != NULL; curr = curr->next)
+
+AdjList GetInvertedList(Set URLlist) {
+    char url[BUFSIZE];
+    char fullurl[BUFSIZE];
+    char word[BUFSIZE];
+    char line[BUFSIZE];
+    FILE *ptr;
+    
+    AdjList invertedIndex = newAdjList();
+    
+    for (int n = 0; n < nElems(URLlist); n++)
     {
-        if (curr->word == w)
-            return curr;
+        strcpy(url,getValue(URLlist,n));
+        strcpy(fullurl,url);
+        ptr = fopen(strcat(fullurl,".txt"), "r");
+
+        while (strstr(fgets(line, BUFSIZE, ptr), "Section-2") == NULL) { }
+        
+        while (fscanf(ptr, "%s", word) != EOF)
+        {
+            if (strstr(word, "#end") != NULL ) break;
+            insertAdjListNode(invertedIndex,normalise(word));
+            insertAdjListURL(invertedIndex,normalise(word),url);
+        }
+        
+        fclose(ptr);
     }
     
-    return curr;
-}        
-            
-            
-            
+    return invertedIndex;
+}
+
+Set GetCollection()
+{
+    FILE * fp = fopen( "collection.txt", "r" );
+    char url[BUFSIZE];
+    
+    Set URLlist = newSet();
+
+    while ( fscanf(fp, "%s", url) != EOF )
+        insertInto(URLlist, url);
+    
+    fclose(fp);
+    return URLlist;
+}
+
+char *normalise(char *word)
+{
+    char *url;
+    url = word;
+    while (*url != '\0')
+    {
+        *url = tolower(*url);
+        if (!((*url >= 'a' && *url <= 'z') || (*url >= '0' && *url <= '9') || *url == '-'))
+        {
+            *url = '\0';
+            break;
+        }
+        url++;
+    }
+
+    return word;
+}
