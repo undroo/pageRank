@@ -7,16 +7,16 @@
 #include "set.h"
 
 
-typedef  struct Node *list;
+typedef  struct Node *Item;
 
 typedef struct Node {
 	char *urlName;
-	list *next;
+	Item *next;
 } Node;
 
 typedef struct SetRep {
 	int elems;	
-	list urlList;
+	Item urlList;
 } SetRep;
 
 Set newSet();
