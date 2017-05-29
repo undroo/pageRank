@@ -6,7 +6,7 @@
 typedef struct SetRep *Set;
 
 Set newSet();
-void disposeSet(Set);
+void freeSet(Set);
 void insertInto(Set,char *);
 //void dropFrom(Set,char *);
 //int  isElem(Set,char *);

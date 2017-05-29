@@ -1,29 +1,27 @@
 //Set functions
 
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
 #include "set.h"
 
-
-typedef  struct Node *Item;
-
 typedef struct Node {
 	char *urlName;
-	Item *next;
+	int urlNum;
+	list *next;
 } Node;
 
 typedef struct SetRep {
 	int elems;	
-	Item urlList;
+	Node urlList;
+	Node cur; 
 } SetRep;
 
 Set newSet();
 void insertInto(Set, char *);
-
-
-static Link newNode(char *);
 
 Set newSet()
 {
@@ -31,15 +29,24 @@ Set newSet()
 	assert(new != NULL);
 	new->elems = 0;
 	new->urlList = NULL;
+	new->cur = NULL;
 	return new;
 }
 
 void insertInto(Set S, char *string)
 {	
 	assert(s != NULL);
+	s->elems++;
+	
+	list curr, prev;
+	list new = newNode(string);
+	new->urlNum = S->elems;
+	
 	if (S->first != NULL){
-		
+		S->urlList = new;
+		S->cur = new;
 	} else {
+		S->cur->next = new;
 	}
 	
 }
@@ -47,23 +54,25 @@ void insertInto(Set S, char *string)
 void freeSet(Set S)
 {
 	if (s == NULL) return;
-	list next, curr = s->urlList;
+	list next, curr = S->urlList;
 	while (curr != NULL) {
 		next = curr->next;
 		free(curr->urlName);
 		free(curr);	
 		curr = next;
 	}
-	free(S->first);
+	free(S);
 }
 
 
 //Helper Functions
 
-static Link newNode(char *url)
+
+static list newNode(char *url)
 {
-	list new = malloc(sizeof(Node));
+	Node new = malloc(sizeof(Node));
 	assert(new != NULL);
+	new->urlNum = 0;
 	new->urlName = strdup(url);
 	new->next = NULL;
 	return new;
