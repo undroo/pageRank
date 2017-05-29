@@ -16,7 +16,6 @@ typedef struct Node {
 
 typedef struct SetRep {
 	int elems;	
-	list first;
 	list urlList;
 } SetRep;
 
@@ -31,7 +30,6 @@ Set newSet()
 	Set new = malloc(sizeof(SetRep));
 	assert(new != NULL);
 	new->elems = 0;
-	new->first = NULL;
 	new->urlList = NULL;
 	return new;
 }
