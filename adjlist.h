@@ -12,4 +12,4 @@ void insertAdjListNode(AdjList,char *);
 void insertAdjListURL(AdjList,char *,char *);
 int  inAdjList(AdjList,char *);
 int  nAdjList(AdjList);
-void showAdjList(AdjList);
+void showAdjList(FILE *,AdjList);
