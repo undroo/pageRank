@@ -26,6 +26,7 @@ void disposeSet(Set);
 void insertInto(Set,char *);
 int  isElem(Set,char *);
 int  nElems(Set);
+char *getValue(Set,int);
 
 static Link newNode(char *);
 static void disposeNode(Link);
@@ -120,6 +121,15 @@ void showSet(Set s)
 			curr = curr->next;
 		}
 	}
+}
+
+char *getValue(Set s, int n)
+{
+    int i;
+    Link curr = s->elems;
+    for (i = 0; i < n; i++)
+        curr = curr->next;
+    return curr->val;
 }
 
 // Helper functions
