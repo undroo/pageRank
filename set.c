@@ -1,6 +1,5 @@
-//Set functions
-
-
+// set.c ... simple, inefficient Set of Strings
+// Based off code written by John Shepherd, September 2015
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,72 +7,135 @@
 #include <string.h>
 #include "set.h"
 
-typedef struct Node {
-	char *urlName;
-	int urlNum;
-	list *next;
-} Node;
+typedef struct Node *Link;
 
+typedef struct Node {
+	char *val;
+	Link  next;
+} Node;
+	
 typedef struct SetRep {
-	int elems;	
-	Node urlList;
-	Node cur; 
+	int   nelems;
+	Link  elems;
 } SetRep;
 
-Set newSet();
-void insertInto(Set, char *);
+// Function signatures
 
+Set newSet();
+void disposeSet(Set);
+void insertInto(Set,char *);
+int  isElem(Set,char *);
+int  nElems(Set);
+
+static Link newNode(char *);
+static void disposeNode(Link);
+
+// newSet()
+// - create an initially empty Set
 Set newSet()
 {
 	Set new = malloc(sizeof(SetRep));
 	assert(new != NULL);
-	new->elems = 0;
-	new->urlList = NULL;
-	new->cur = NULL;
+	new->nelems = 0;
+	new->elems = NULL;
 	return new;
 }
 
-void insertInto(Set S, char *string)
-{	
-	assert(s != NULL);
-	s->elems++;
-	
-	list curr, prev;
-	list new = newNode(string);
-	new->urlNum = S->elems;
-	
-	if (S->first != NULL){
-		S->urlList = new;
-		S->cur = new;
-	} else {
-		S->cur->next = new;
-	}
-	
-}
-
-void freeSet(Set S)
+// disposeSet(Set)
+// - clean up memory associated with Set
+void disposeSet(Set s)
 {
 	if (s == NULL) return;
-	list next, curr = S->urlList;
+	Link next, curr = s->elems;
 	while (curr != NULL) {
 		next = curr->next;
-		free(curr->urlName);
-		free(curr);	
+		disposeNode(curr);	
 		curr = next;
 	}
-	free(S);
 }
 
-
-//Helper Functions
-
-
-static list newNode(char *url)
+// insertInto(Set,Str)
+// - ensure that Str is in Set
+void insertInto(Set s, char *str)
 {
-	Node new = malloc(sizeof(Node));
+	assert(s != NULL);
+	   
+	if (isElem(s,str)) return; 
+	
+	Link new = newNode(str);
+	s->nelems++;
+	
+	
+	if (s->elems == NULL)
+	    s->elems = new;
+	else
+	{
+	    	Link curr = s->elems, prev;
+	    while(curr != NULL)
+	    {
+	        prev = curr;
+	        curr = curr->next;
+	    }
+	    prev->next = new;
+	}
+}
+
+// isElem(Set,Str)
+// - check whether Str is contained in Set
+int isElem(Set s, char *str)
+{
+	assert(s != NULL);
+	
+    Link curr = s->elems;
+	while (curr != NULL ) {
+		if (!strcmp(curr->val, str))
+		    return 1;
+		curr = curr->next;
+	}
+    return 0;
+}
+
+// nElems(Set)
+// - return # elements in Set
+int  nElems(Set s)
+{
+	assert(s != NULL);
+	return s->nelems;
+}
+
+// showSet(Set)
+// - display Set (for debugging)
+void showSet(Set s)
+{
+	Link curr;
+	if (s->nelems == 0)
+		printf("Set is empty\n");
+	else {
+		printf("Set has %d elements:\n",s->nelems);
+		int id = 0;
+		curr = s->elems;
+		while (curr != NULL) {
+			printf("[%03d] %s\n", id, curr->val);
+			id++;
+			curr = curr->next;
+		}
+	}
+}
+
+// Helper functions
+
+static Link newNode(char *str)
+{
+	Link new = malloc(sizeof(Node));
 	assert(new != NULL);
-	new->urlNum = 0;
-	new->urlName = strdup(url);
+	new->val = strdup(str);
 	new->next = NULL;
 	return new;
+}
+
+static void disposeNode(Link curr)
+{
+	assert(curr != NULL);
+	free(curr->val);
+	free(curr);
 }
