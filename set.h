@@ -14,5 +14,6 @@ void insertInto(Set,char *);
 int  isElem(Set,char *);
 int  nElems(Set);
 void showSet(Set);
+char *getValue(Set, int);
 
 #endif
