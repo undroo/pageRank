@@ -1,8 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include "set.h"
+#ifndef ADJLIST_H
+#define ADJLIST_H
 
 typedef struct AdjListRep *AdjList;
 
@@ -13,3 +10,5 @@ void insertAdjListURL(AdjList,char *,char *);
 int  inAdjList(AdjList,char *);
 int  nAdjList(AdjList);
 void showAdjList(FILE *,AdjList);
+
+#endif
