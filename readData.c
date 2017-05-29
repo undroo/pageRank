@@ -33,3 +33,15 @@ int main(int argc, char **argv)
 }
 
 
+Set GetCollection()
+{
+    FILE * fp = fopen( "collection.txt", "r" );
+    char url[BUFSIZE];
+    
+    Set URLlist = newSet();
+
+    while ( fscanf(fp, "%s", url) != EOF )
+        insertInto(URLlist, url);
+    
+    return URLlist;
+}
