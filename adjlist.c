@@ -30,6 +30,7 @@ void showAdjList(AdjList);
 Set getSet(AdjList,char *);
 
 static Item newNode(char *);
+static int wordcmp(char *p, char *q);
 
 // newAdjList()
 // - create an initially empty Adjacency List
@@ -79,6 +80,44 @@ void insertAdjListNode(AdjList al, char *str)
 	        curr = curr->next;
 	    }
 	    prev->next = new;
+	}
+}
+
+// insertAdjListNodeAlpha(AdjList,Str)
+// - insert Str into Adjacency List in alphabetical order
+void insertAdjListNodeAlpha(AdjList al, char *str)
+{
+	assert(al != NULL);
+	   
+	if (inAdjList(al,str)) return; 
+	
+	Item new = newNode(str);
+        al->nitems++;
+
+	if (al->items == NULL) // list is empty
+	    al->items = new;
+	
+	else // list has items
+	{
+	    	Item curr = al->items, prev = al->items;
+	    while (curr != NULL) // iterate through list until end of list is reached
+	    {
+	        if (wordcmp(curr->word,str)) // Str goes before current node
+	        {
+	            if (!strcmp(curr->word,al->items->word)) // insert new node at start of list
+	            {
+	                new->next = curr;
+	                al->items = new;
+	                return;
+	            }
+	            
+	            break;
+	        }
+	        prev = curr;
+	        curr = curr->next;
+	    }
+	    prev->next = new;
+	    new->next = curr;
 	}
 }
 
@@ -166,4 +205,30 @@ static Item newNode(char *str)
 	new->urls = urls;
 	new->next = NULL;
 	return new;
+}
+
+// wordcmp(char *,char *)
+// - compare words P and Q for alphabetical order
+// - if P comes before Q, return 0
+// - if Q comes before P, return 1
+// - if words are the same, return 0
+static int wordcmp(char *p, char *q)
+{   
+    if (!strcmp(p,q))
+        return 0;
+    
+    while (*p != '\0' && *q != '\0')
+    {
+        if ((int)(*p) > (int)(*q))
+            return 1;
+        else if ((int)(*p) < (int)(*q))
+            return 0;
+        p++;
+        q++;
+    }
+    
+    if (*p == '\0')
+        return 0;
+      
+    return 1;
 }
