@@ -6,6 +6,7 @@ typedef struct AdjListRep *AdjList;
 AdjList newAdjList();
 void disposeAdjList(AdjList);
 void insertAdjListNode(AdjList,char *);
+void insertAdjListNodeAlpha(AdjList,char *);
 void insertAdjListURL(AdjList,char *,char *);
 int  inAdjList(AdjList,char *);
 int  nAdjList(AdjList);
