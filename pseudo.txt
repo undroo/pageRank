@@ -1,0 +1,56 @@
+//Some pseudo code
+
+
+int main(){
+
+	//check how many terms there are
+	int numD = argc - 1;
+
+	int count = 1;
+	int numC[numD] = {0};
+	int occurance[numD] = {0};
+	while (count < num){
+		foreach document(){
+			if(isContain(url, argv[count])){
+				occurance[count] = frequency(url, argv[count]);
+				numC[count]++;
+			} 
+		}	
+		count++;
+	}
+
+	calculateTFIDF();
+
+
+	return 0;
+}
+
+
+
+
+
+functions required
+
+
+isContain(char *url, char *term){
+	while(fscanf(url, input) != EOF){
+		if(strcmp(input, term)){
+			return TRUE;
+		}
+	}
+}
+	
+	
+frequency(char *url, char *term){
+	int occurance = 0;
+	while(fscanf(url, "%s", input) != EOF){
+		if(strcmp(input, term)){
+			occurance++;
+		}
+	}
+	return occurance;
+}
+
+	
+	
+	
