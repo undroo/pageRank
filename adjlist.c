@@ -27,6 +27,7 @@ void insertAdjListURL(AdjList,char *,char *);
 int  inAdjList(AdjList,char *);
 int  nAdjList(AdjList);
 void showAdjList(AdjList);
+Set getSet(AdjList,char *);
 
 static Item newNode(char *);
 
@@ -138,6 +139,21 @@ void showAdjList(FILE * ptr, AdjList al)
 		}
 	}
 }
+
+Set getSet(AdjList al, char * w)
+{
+    int i;
+    Item curr = al->items;
+    for (i = 0; i < al->nitems; i++)
+    {
+	if (!strcmp(curr->word,w))
+	    return curr->urls;
+	curr = curr->next;
+    }
+    return NULL;
+}
+
+
 // Helper functions
 
 static Item newNode(char *str)
