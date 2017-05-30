@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <string.h>
 #include <ctype.h>
-#include "invertedIndex.h"
 #include "set.h"
 #include "adjlist.h"
 #include "searchPagerank.h"
@@ -32,7 +31,7 @@ int main(int argc, char **argv)
             
             if (n == 1)
             {
-                printf( "%s\n", url );
+                puts( url );
                 i++;
             }
             n = 1;
@@ -55,4 +54,22 @@ int searchLine(FILE *fp, char * word, char * url)
             return 1;
     }
     return 0;
+}
+
+char *normalise(char *word)
+{
+    char *url;
+    url = word;
+    while (*url != '\0')
+    {
+        *url = tolower(*url);
+        if (!((*url >= 'a' && *url <= 'z') || (*url >= '0' && *url <= '9') || *url == '-'))
+        {
+            *url = '\0';
+            break;
+        }
+        url++;
+    }
+
+    return word;
 }
