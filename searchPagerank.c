@@ -13,6 +13,14 @@ int main(int argc, char **argv)
 {
     FILE *fp1, *fp2;
     char url[BUFSIZE];
+    Set inputs = newSet();
+    
+    int j = 1;
+    for (j = 1; j < argc; j++)
+    {
+        if (!isElem(inputs,argv[j]))
+            insertInto(inputs,argv[j]);
+    }
     
     fp1 = fopen("pagerankList.txt", "r");
     assert(fp1 != NULL);
@@ -24,10 +32,9 @@ int main(int argc, char **argv)
         {
             fp2 = fopen("invertedIndex.txt", "r");
             assert(fp2 != NULL);
- 
-            int j;
-            for (j = 1; j < argc && n == 1; j++)
-                n = searchLine(fp2,argv[j],url);
+
+            for (j = 0; j < nElems(inputs) && n == 1; j++)
+                n = searchLine(fp2,getValue(inputs,j),url);
             
             if (n == 1)
             {
