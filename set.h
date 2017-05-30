@@ -8,6 +8,7 @@ typedef struct SetRep *Set;
 Set newSet();
 void disposeSet(Set);
 void insertInto(Set,char *);
+void insertIntoAlpha(Set,char *);
 int  isElem(Set,char *);
 int  nElems(Set);
 void showSet(Set);
