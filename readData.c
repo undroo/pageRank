@@ -6,42 +6,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-/*
+#include <string.h>
+#include <ctype.h>
 #include "readData.h"
-#include "pagerank.c"
-*/
 #include "set.h"
-#include "graph.h"
+#include "adjlist.h"
 
-int main(int argc, char **argv)
-{
+
+#define BUFFSIZE 255
+
+
+Set GetCollection(){
 	FILE *fp;
-	fp = fopen(collection.txt, "r");
+	fp = fopen("collection.txt", "r");
 	char urlBuffer[BUFFSIZE];
-	char wordBuffer[BUFFSIZE];
 	
+	Set urlSet;
+	urlSet = newSet();
 	
-	Set *url;
-	urlList = newSet();
-	while (fscanf(fp, "%s", urlBuffer) != 0){
-		insertInto(urlList, urlBuffer);
+	while (fscanf(fp, "%s", urlBuffer) != EOF){
+		insertInto(urlSet, urlBuffer);
 	}
 	
 	
+	fclose(fp);
+	return urlSet;
+}
+
+AdjList buildList(Set urlSet){
+	char line[BUFFSIZE];
+	char urlBuffer[BUFFSIZE];
+	char url[BUFFSIZE];
+	AdjList M = newAdjList();
 	
-	return 0;
+	
+	
+	int count = 0;
+	while (count < nElems(urlSet)){
+		strcpy(url, getValue(urlSet, count));
+		FILE *fp;
+		fp = fopen(strcat(url,".txt"), "r");
+		
+		if (strstr(fgets(line, BUFFSIZE, fp), "Section-1") != NULL);
+		while (fscanf(fp, "%s", urlBuffer) != EOF){
+			//check its inserting correctly
+			//watch out for duplicates and self inclusion
+			insertAdjListURL(M, url, urlBuffer);		
+		}
+		
+		count++;
+	}
+	
+	
+	return M;
 }
 
 
-Set GetCollection()
-{
-    FILE * fp = fopen( "collection.txt", "r" );
-    char url[BUFSIZE];
-    
-    Set URLlist = newSet();
 
-    while ( fscanf(fp, "%s", url) != EOF )
-        insertInto(URLlist, url);
-    
-    return URLlist;
-}
