@@ -122,8 +122,13 @@ void showSetInt(SetInt s)
 	}
 }
 
+// getValueInt(SetInt,int)
+// - return the value of the nth node of the set
+// - return 0 if input N is not valid
 int getValueInt(SetInt s, int n)
 {
+    if (n >= nElemsInt(s))
+    	return 0;
     int i;
     Link curr = s->elems;
     for (i = 0; i < n; i++)
@@ -147,6 +152,29 @@ int findNodeInt(SetInt s, int n)
         i++;
     }
     return -1;
+}
+
+// getInt(SetInt)
+// - return an the first int that is not in the set
+// - assumes that values go from 1...n, where n is the number is items in a set
+// - return 0 if all values are taken
+int  getInt(SetInt s)
+{
+    int i;
+    Link curr = s->elems;
+    for (i = 1; i <= nElemsInt(s); i++)
+    {
+        while (curr != NULL)
+        {
+            if (curr->val == i)
+	    	break;
+            else
+                curr = curr->next;
+        }
+        if (curr == NULL)
+            return i;
+    }
+    return 0;
 }
 
 // Helper functions
