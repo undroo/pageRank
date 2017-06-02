@@ -57,6 +57,7 @@ void insertAdjListNode(AdjList al, char *str)
 	if (inAdjList(al,str)) return; 
 	
 	Item new = newNode(str);
+	assert(new != NULL);
 	al->nitems++;
 	
 	if (al->items == NULL)
@@ -115,6 +116,7 @@ void insertAdjListNodeAlpha(AdjList al, char *str)
 // - add Url to a node containing Word in Adjacency List
 void insertAdjListURL(AdjList al, char * word, char * url)
 {
+    assert(al != NULL);
     Item curr = al->items;
 	while (curr != NULL ) // iterate through words
 	{
@@ -128,7 +130,8 @@ void insertAdjListURL(AdjList al, char * word, char * url)
 // - check whether Str is contained in Adjacency List
 int inAdjList(AdjList al, char *str)
 {
-	assert(al != NULL);
+    assert(al != NULL);
+    assert(str != NULL);
 	
     Item curr = al->items;
 	while (curr != NULL ) {
@@ -151,6 +154,8 @@ int  nAdjList(AdjList al)
 // - display Adjancency List
 void showAdjList(FILE * ptr, AdjList al)
 {	
+	assert(al != NULL);
+	assert(ptr != NULL);
 	if (al->nitems == 0)
 		fprintf(ptr, "No words\n");
 	else
@@ -175,6 +180,8 @@ void showAdjList(FILE * ptr, AdjList al)
 // - return -1 if node not found
 int  findAdjListNode(AdjList al,char * s)
 {
+    assert(al != NULL);
+    assert(s != NULL);
     Item curr = al->items;
     int n = 0;
     
@@ -192,7 +199,8 @@ int  findAdjListNode(AdjList al,char * s)
 // - return Set in the nth node
 Set  getSet(AdjList al,int n)
 {
-    if (n > al->nitems) return NULL;
+    assert(al != NULL);
+    assert(n < al->nitems);
     
     Item curr = al->items;
     int i;
