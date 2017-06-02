@@ -30,7 +30,7 @@ Set GetCollection(){
 	return urlSet;
 }
 
-AdjList buildList(Set urlSet){
+AdjList buildM(Set urlSet){
 	char line[BUFSIZE];
 	char url[BUFSIZE];
 	char fullurl[BUFSIZE];
@@ -60,3 +60,28 @@ AdjList buildList(Set urlSet){
 }
 
 
+SetInt buildL(Set s)
+{
+    FILE * fp;
+    char url[BUFSIZE];
+    char word[BUFSIZE];
+    char line[BUFSIZE];
+    SetInt L = newSetInt();
+    
+    int i, n;
+    for (i = 0; i < nElems(s); i++)
+    {
+        n = 0;
+        strcpy(url, getValue(s,i));
+        fp = fopen(strcat(url,".txt"), "r");
+		while (strstr(fgets(line, BUFSIZE, fp), "Section-1") == NULL) { }
+		while (fscanf(fp, "%s", word) != EOF )
+        {
+            if (strstr(word, "#end") != NULL) break;
+            n++;
+        }
+        insertIntoInt(L,n);
+        fclose(fp);
+    }
+    return L;
+}
