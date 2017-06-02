@@ -1,4 +1,4 @@
-//Possibly good code??
+//Search TdIdf and calculations
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +24,6 @@ int main(int argc, char **argv){
 	//check how many terms there are
 	int numD = argc - 1;
 	if (numD == 0){
-		//printf("Empty\n");
 		return 0;
 	}
 	Set collection = GetCollection();
@@ -37,17 +36,11 @@ int main(int argc, char **argv){
 	
 	Set tSet = newSet();
 	tSet = isContain(terms);
-	
-	if (assure(tSet,terms) == 1){
-		return EXIT_FAILURE;
-	}
-	
+
 	Set match = newSet();
 	match = findDuplicate(tSet);
 	
 	printSearch(match, terms, nElems(collection));
-	
-	
 	
 	disposeSet(terms);
 	disposeSet(tSet);
@@ -80,10 +73,7 @@ Set isContain(Set terms){
 		sscanf(string, "%s", word);
 		for(count = 0; count < num; count++){
 			if(strcmp(word, getValue(terms, count)) == 0){
-				//printf("Before: %d\n", strlen(string));
-				urls = strtok(string, "\n");
-				//printf("After: %d\n", strlen(urls));
-				insertInto(list, urls);
+				insertInto(list, string);
 			}
 		}
 	}
@@ -106,6 +96,7 @@ Set findDuplicate(Set list){
 	char buff[BUFFSIZE];
 	
 	
+	//create first set to compare urls
 	test = strtok(getValue(list, 0), space);
 	while (test != NULL){
 		test = strtok(NULL, space);
@@ -113,16 +104,13 @@ Set findDuplicate(Set list){
 			sscanf(test, "%s", test);
 			insertInto(loop, test);
 	}
-	
-	
-	
-	showSet(loop);
 
+	//if only searching one word, nothing to compare
 	if (nElems(list) == 1){
 		return loop;
 	}
 	
-	
+	//create second set to compare urls
 	countA = 0;
 	while (countA < nElems(list)){
 			word = strtok(getValue(list, countA), space);
@@ -134,24 +122,18 @@ Set findDuplicate(Set list){
 			}
 			countA++;
 	}
-	showSet(comparisons);
 	
+	//comparing urls to find common ones
 	count = 0;
 	while (count < nElems(loop)){
 		test = getValue(loop, count);
-		//printf("test: %s %d\n", test, strlen(test));
 		dup = 1;
 		countA = 0;
-		//error where cant work with last number being a match or being tested!!
 		while (countA < nElems(comparisons)){
 			word = getValue(comparisons, countA);
-			printf("testing: %s\n", test);
-			printf("comparing: %s %s\n", word, test);
 			if(strcmp(word,test) == 0){
-				printf("matching: %s %s\n", word, test);
 				dup++;
 				if (dup == nElems(list)){
-					//find neater implementation
 					if (nElems(duplicate) < nElems(loop) && nElems(duplicate) < nElems(comparisons))
 						insertInto(duplicate, word);
 				}
@@ -160,7 +142,6 @@ Set findDuplicate(Set list){
 		}
 		count++;
 	}
-	showSet(duplicate);
 	disposeSet(loop);
 	disposeSet(comparisons);
 	return duplicate;	
@@ -183,15 +164,12 @@ void printSearch(Set urlList, Set terms, int totalN){
 	for (count = 0; count < nElems(urlList); count++){
 		url = getValue(urlList, count);
 		sprintf(urlName, "%s.txt", url);
-		//printf("link %s %d\n", urlName, count);
 		fp = fopen(urlName, "r");
 		if (fp == NULL) break;
 		
 		
 		//get to section 2 in each text and each word
-		//seg faulting here!!
 		while (strstr(fgets(line, BUFFSIZE, fp), "Section-2") == NULL) { }
-		//reset increment
 
 		countA = 0;
 		while(fscanf(fp, "%s", word) != EOF && strcmp(word,"#end") != 0){
@@ -205,7 +183,6 @@ void printSearch(Set urlList, Set terms, int totalN){
 				countA++;
 			}
 		}
-	//	printf("%d %d", duplicate[0], duplicate[1]);
 		fclose(fp);
 	}
 	
@@ -221,16 +198,16 @@ void printSearch(Set urlList, Set terms, int totalN){
 	count = 0;
 	while (count < nElems(urlList)){
 		doc = (float)totalN/(float)nElems(urlList);
-		//printf("%d %.6f\n", totalN, doc);
 		idf = log10(doc);
 		value = (float)duplicate[count] * idf;
 		tdidf[count] = value;
-	//	printf("%s %d %.6f\n", getValue(urlList, count), duplicate[count], value);
 		count++;
 	}
 	
 	
 	//sorting tdidf values in order
+	//rather than sort array into correct order, obtain order in which results 
+	//should be displayed
 	int order[nElems(terms)];
 	int position;
 	count = 0;
@@ -248,13 +225,13 @@ void printSearch(Set urlList, Set terms, int totalN){
 			}
 			countA++;
 		}
-		//printf("%.6f\n", rank[position]);
 		rank[position] = 0;
 		order[count] = position;
 		count++;
 	}
 	
-	for (count = 0; count < nElems(terms); count++){
+	//Printing final results
+	for (count = 0; count < nElems(terms) && count < OUTSIZE; count++){
 		printf("%s %.6f\n", getValue(urlList, order[count]), tdidf[order[count]]); 
 	}
 }
