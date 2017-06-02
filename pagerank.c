@@ -11,7 +11,7 @@
 #include "readData.h"
 
 
-#define BUFFSIZE 1024
+#define BUFSIZE 1024
 
 float **pageRankArray(int, int, int, Set, AdjList);
 float pageRank(int, int, int, char *, Set, AdjList);
@@ -20,132 +20,67 @@ float calcDiffPR(char *url, AdjList M);
 
 int main(int argc, char **argv){
 
+	if (argc != 4) return EXIT_FAILURE;
+	
+	
+	double d = atof(argv[1]);
+	double diffPR = atof(argv[2]);
+	int maxIter = atoi(argv[3]);
 	
 	Set urlSet;
 	urlSet = GetCollection();
 	AdjList M;
 	M = buildList(urlSet);
-	showAdjList(M);
 	
-	if (argc != 4) return EXIT_FAILURE;
-	int d = atoi(argv[1]);
-	int diffPR = atoi(argv[2]);
-	int maxIter = atoi(argv[3]);
-	int num = nElems(urlSet);
-	float **PR;
-	PR = pageRankArray(d, diffPR, maxIter, urlSet, M);
+	showSet(urlSet);
+	showAdjList(stdout, M);
 	
-	printf("!!\n");
+	int N = nElems(urlSet);
+	
+	double PR[N][maxIter];
+	
+	int i, j;
+	
+    int iteration = 0;
+	double diff = (double)diffPR;
+    double a = (double)(1-d)/(double)N;
+    
+    char url[BUFSIZE];
+    int index;
+    
+	for (i = 0; i < N; i++)
+	    PR[i][0] = 1/(double)N;
+	    
+	while (iteration < maxIter && diff >= diffPR)
+	{
+	    iteration++;
+	    
+	    for (i = 0; i < N; i++) // iterate through url list
+        {
+	        Set m = getSet(M,i); // get M list of current url
+	        
+	        double sum = 0;
+	        for (j = 0; j < nElems(m); j++) // iterate through M list
+	        {
+	            strcpy(url,getValue(m,j)); // get j'th url of M list
+	            index = findAdjListNode(M,url); // get index of url
+	            sum += (double)PR[index][iteration-1]/(double)nElems(getSet(M,j));
+	        }
+	        
+	        PR[i][iteration] = (double)a + (double)d*(double)sum;
+	    
+	        diff = 0;
+	        for (j = 0; j < N; j++)
+	            diff += fabs(PR[i][iteration]-PR[i][iteration-1]);
+	    }
+	}
+	
+	for (i = 0; i < N; i++)
+	    printf( "[%d]: %f\n", i, PR[i][iteration]);
+	
 	
 	disposeSet(urlSet);
-	free(urlSet);
-	
-	
-	
-	/*
-	Structure for pageRank
-	open file collection.txt
-	read all urls into a set, urlSet
-	check for duplicates in set
-	
-	while (fscanf(fp, "%s", urlBuffer)){
-		insertInto(urlSet, urlBuffer);
-	}
-	
-	create adjacency list M with numUrl vertices
-	Foreach 'cur' url in urlSet {
-		add 'cur' into matrix
-		
-		function from readData(char 'cur', Graph g){
-			use snprintf to create file name 'cur' url.txt
-			fopen new .txt file
-			add in all pointers that cur points to
-			eg. cur -> url1, add cur to url1, since we are doing inverted index 
-		}
-			
-		
-		increment through
-	}
-	
-	create pageRank array ()
-		2d integer array
-		how to save the order in which urls are created?
-		each node in set will save url name as well as a number to signify the order
-		
-	
-	calculate pageRank using adjacency list M()
-	while (going across pageRank array){
-		reset urls
-		while(going down pageRank array){
-			if ()
-			function calculate pageRank();
-			add value to pageRank array
-			increment through urlSet
-			increment 
-		}
-		increment
-	}
-	
-	
-	
-	
-	disposeGraph(M)
-	*/
-	
-	
-	
+	disposeAdjList(M);
 	
 	return 0;
 }
-
-
-float **pageRankArray(int d, int diffPR, int maxIter, Set urlSet, AdjList M){
-	
-	int num = nElems(urlSet);
-	int countA = 0;
-	int countB = 0;
-	float diff = diffPR;
-	char *url;
-	
-	//rows of urls, columns of pageRank
-	float **PR = (float **)malloc(sizeof(float *)*num);
-	for (countA = 0; countA < num; countA++){
-		PR[countA] = (float *)malloc(sizeof(float)*maxIter);
-	}
-	
-	countA = 0;
-	while(countA < maxIter && diff >= diffPR){
-		countB = 0;
-		while(countB < num){
-			if (countA == 0){
-				printf("0\n");
-				PR[countB][countA] = 1/num;
-			} else {
-				//printf("!\n");
-				url = getValue(urlSet, countB);
-				PR[countB][countA] = pageRank(d, diffPR, maxIter, url, urlSet, M);
-				//diff = calcDiffPR(url, M);
-			}
-			countB++;
-		}
-		countA++;
-	}
-	//printf("%.6f\n", PR[0][0]);
-	return PR;
-}
-
-float calcDiffPR(char *url, AdjList M){
-	
-	
-	return 0;
-}
-
-float pageRank(int d, int diffPR, int maxIter, char *url, Set urlSet, AdjList M){
-	
-	
-	
-	
-	
-	return 0;
-}
-
