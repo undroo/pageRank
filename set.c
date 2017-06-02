@@ -1,5 +1,5 @@
 // set.c ... simple, inefficient Set of Strings
-// Based off code written by John Shepherd, September 2015
+// Written by John Shepherd, September 2015
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,11 +27,14 @@ void insertInto(Set,char *);
 void insertIntoAlpha(Set,char *);
 int  isElem(Set,char *);
 int  nElems(Set);
+void showSet(Set s);
+void showNode(Set,int);
 char *getValue(Set,int);
+int findNode(Set,char *);
 
+static int wordcmp(char *,char *);
 static Link newNode(char *);
 static void disposeNode(Link);
-static int wordcmp(char *,char *);
 
 // newSet()
 // - create an initially empty Set
@@ -58,7 +61,7 @@ void disposeSet(Set s)
 }
 
 // insertInto(Set,Str)
-// - ensure that Str is in Set
+// - insert Str onto the end of set S
 void insertInto(Set s, char *str)
 {
 	assert(s != NULL);
@@ -163,13 +166,43 @@ void showSet(Set s)
 	}
 }
 
+void showNode(Set s, int n)
+{
+    int i;
+    Link curr = s->elems;
+    for (i = 0; i < n; i++ )
+        curr = curr->next;
+    printf( "%s\n", curr->val);
+}
+
 char *getValue(Set s, int n)
 {
+
+    assert (n <= nElems(s));
     int i;
     Link curr = s->elems;
     for (i = 0; i < n; i++)
         curr = curr->next;
+
     return curr->val;
+}
+
+// findNode(Set,char *)
+// - iterate through set to find node containing w
+// - return index of node
+// - return -1 if node not found
+int findNode(Set s,char * w)
+{
+    Link curr = s->elems;
+    int n = 0;
+    while (curr != NULL)
+    {
+        if (!strcmp(curr->val,w))
+            return n;
+        curr = curr->next;
+        n++;
+    }
+    return -1;
 }
 
 // Helper functions
