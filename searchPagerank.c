@@ -5,9 +5,11 @@
 #include <ctype.h>
 #include "set.h"
 #include "adjlist.h"
-#include "searchPagerank.h"
 
 #define BUFSIZE 1024
+
+int searchFile(FILE *,char *,char *);
+char *normalise(char *);
 
 int main(int argc, char **argv)
 {
