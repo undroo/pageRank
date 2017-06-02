@@ -6,10 +6,13 @@
 #include <math.h>
 #include "setInt.h"
 #include "set.h"
-#include "scaledFootrule.h"
 
 #define BUFSIZE 1024
 #define MAXURL 100
+
+int calculateP(int *,int,SetInt,SetInt);
+double calculateW(int *,SetInt,int,int);
+void printOrderedList(Set,SetInt);
 
 int main(int argc, char **argv)
 {
