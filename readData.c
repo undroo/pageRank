@@ -1,4 +1,5 @@
 //readData
+//Functions called by pagerank in order to create lists and sets to be used for calculations
 //This function is heavily based on set.h and set.c from functions given in week 8 labs
 
 
@@ -15,7 +16,7 @@
 
 #define BUFSIZE 1024
 
-
+//Builds set from collection.txt of all the urls available
 Set GetCollection(){
 	FILE *fp;
 	fp = fopen("collection.txt", "r");
@@ -30,6 +31,7 @@ Set GetCollection(){
 	return urlSet;
 }
 
+//Adjacency List for urls that contain the links that points to the url
 AdjList buildM(Set urlSet){
 	char line[BUFSIZE];
 	char url[BUFSIZE];
@@ -59,7 +61,7 @@ AdjList buildM(Set urlSet){
 	return M;
 }
 
-
+//Set for urls that contains all of the urls that the initial url points to
 SetInt buildL(Set s)
 {
     FILE * fp;
