@@ -166,8 +166,11 @@ void showSet(Set s)
 	}
 }
 
+// showNode(Set,int)
+// - print the value of the nth node
 void showNode(Set s, int n)
 {
+    assert( n < nElems(s));
     int i;
     Link curr = s->elems;
     for (i = 0; i < n; i++ )
@@ -175,10 +178,11 @@ void showNode(Set s, int n)
     printf( "%s\n", curr->val);
 }
 
+// getValue(Set,int)
+// - return value of the nth node
 char *getValue(Set s, int n)
 {
-
-    assert (n <= nElems(s));
+    assert (n < nElems(s));
     int i;
     Link curr = s->elems;
     for (i = 0; i < n; i++)
