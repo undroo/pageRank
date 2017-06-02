@@ -1,4 +1,4 @@
-// invertedIndex.c
+// inverted.c
 // Written by Michelle Seeto (5061204)
 // Assignment 2 COMP1927 S1,17
 
@@ -7,22 +7,24 @@
 #include <assert.h>
 #include <string.h>
 #include <ctype.h>
-#include "invertedIndex.h"
 #include "set.h"
 #include "adjlist.h"
+#include "ReadData.h"
+#include "setInt.h"
 
 #define BUFSIZE 1024
 
-AdjList GetInvertedList(Set);
 Set GetCollection();
+AdjList GetInvertedList(Set);
 char *normalise(char *);
 
 int main()
 {
     Set s = GetCollection();
     AdjList al = GetInvertedList(s);
-    
+
     FILE * ptr = fopen("invertedIndex.txt", "w");
+    assert( ptr != NULL );
     showAdjList(ptr,al);
     
     fclose(ptr);
@@ -47,13 +49,14 @@ AdjList GetInvertedList(Set URLlist) {
         strcpy(url,getValue(URLlist,n));
         strcpy(fullurl,url);
         ptr = fopen(strcat(fullurl,".txt"), "r");
+        assert( ptr != NULL );
 
         while (strstr(fgets(line, BUFSIZE, ptr), "Section-2") == NULL) { }
         
         while (fscanf(ptr, "%s", word) != EOF)
         {
             if (strstr(word, "#end") != NULL ) break;
-            insertAdjListNode(invertedIndex,normalise(word));
+            insertAdjListNodeAlpha(invertedIndex,normalise(word));
             insertAdjListURL(invertedIndex,normalise(word),url);
         }
         
@@ -61,20 +64,6 @@ AdjList GetInvertedList(Set URLlist) {
     }
     
     return invertedIndex;
-}
-
-Set GetCollection()
-{
-    FILE * fp = fopen( "collection.txt", "r" );
-    char url[BUFSIZE];
-    
-    Set URLlist = newSet();
-
-    while ( fscanf(fp, "%s", url) != EOF )
-        insertInto(URLlist, url);
-    
-    fclose(fp);
-    return URLlist;
 }
 
 char *normalise(char *word)
