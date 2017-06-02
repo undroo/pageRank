@@ -13,56 +13,50 @@
 #include "adjlist.h"
 
 
-#define BUFFSIZE 255
+#define BUFSIZE 1024
 
 
 Set GetCollection(){
 	FILE *fp;
 	fp = fopen("collection.txt", "r");
-	char urlBuffer[BUFFSIZE];
+	char urlBuffer[BUFSIZE];
 	
-	Set urlSet;
-	urlSet = newSet();
+	Set urlSet = newSet();
 	
-	while (fscanf(fp, "%s", urlBuffer) != EOF){
+	while (fscanf(fp, "%s", urlBuffer) != EOF)
 		insertInto(urlSet, urlBuffer);
-	}
-	
 	
 	fclose(fp);
 	return urlSet;
 }
 
 AdjList buildList(Set urlSet){
-	char line[BUFFSIZE];
-	char urlBuffer[BUFFSIZE];
-	char *url;
+	char line[BUFSIZE];
+	char url[BUFSIZE];
+	char fullurl[BUFSIZE];
+	char urlBuffer[BUFSIZE];
 	AdjList M = newAdjList();
 	
 	int count; 
-	count = 0;
-	while (count < nElems(urlSet)){
+	for (count = 0; count < nElems(urlSet); count++)
 		insertAdjListNode(M, getValue(urlSet, count));
-		count++;
-	}
 	
-	count = 0;
-	while (count < nElems(urlSet)){
-		url = strcat(getValue(urlSet, count),".txt");
+	for (count = 0; count < nElems(urlSet); count++)
+	{
+		strcpy(url,getValue(urlSet,count));
+		strcpy(fullurl,url);
+		
 		FILE *fp;
-		fp = fopen(url, "r");
+		fp = fopen(strcat(fullurl,".txt"), "r");
 		if (fp == NULL) break;
-		while (strstr(fgets(line, BUFFSIZE, fp), "Section-1") == NULL);
-		while (fscanf(fp, "%s", urlBuffer) != EOF){
-			if (strcmp(urlBuffer, "#end") == 0) break;
-			//remove .txt that was added from strcat
-			strtok(getValue(urlSet, count),".txt");
-			insertAdjListURL(M, urlBuffer, getValue(urlSet, count));		
-		}
-		count++;
+		
+		while (strstr(fgets(line, BUFSIZE, fp), "Section-1") == NULL);
+		while (fscanf(fp, "%s", urlBuffer) != EOF)
+			insertAdjListURL(M, urlBuffer, url);	
+	    
+	    fclose(fp);	
 	}	
 	return M;
 }
-
 
 
