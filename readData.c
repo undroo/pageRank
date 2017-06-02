@@ -19,6 +19,7 @@
 Set GetCollection(){
 	FILE *fp;
 	fp = fopen("collection.txt", "r");
+	assert(fp != NULL);
 	char urlBuffer[BUFSIZE];
 	
 	Set urlSet = newSet();
@@ -74,6 +75,7 @@ SetInt buildL(Set s)
         n = 0;
         strcpy(url, getValue(s,i));
         fp = fopen(strcat(url,".txt"), "r");
+	assert(fp != NULL);
 		while (strstr(fgets(line, BUFSIZE, fp), "Section-1") == NULL) { }
 		while (fscanf(fp, "%s", word) != EOF )
         {
