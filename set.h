@@ -1,3 +1,6 @@
+// set.h ... interface to simple Set of Strings
+// Written by John Shepherd, September 2015
+
 #ifndef SET_H
 #define SET_H
 
@@ -12,6 +15,8 @@ void insertIntoAlpha(Set,char *);
 int  isElem(Set,char *);
 int  nElems(Set);
 void showSet(Set);
-char *getValue(Set, int);
+void showNode(Set,int);
+char *getValue(Set,int);
+int findNode(Set,char *);
 
 #endif
