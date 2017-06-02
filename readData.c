@@ -36,28 +36,31 @@ Set GetCollection(){
 AdjList buildList(Set urlSet){
 	char line[BUFFSIZE];
 	char urlBuffer[BUFFSIZE];
-	char url[BUFFSIZE];
+	char *url;
 	AdjList M = newAdjList();
 	
-	
-	
-	int count = 0;
+	int count; 
+	count = 0;
 	while (count < nElems(urlSet)){
-		strcpy(url, getValue(urlSet, count));
-		FILE *fp;
-		fp = fopen(strcat(url,".txt"), "r");
-		
-		if (strstr(fgets(line, BUFFSIZE, fp), "Section-1") != NULL);
-		while (fscanf(fp, "%s", urlBuffer) != EOF){
-			//check its inserting correctly
-			//watch out for duplicates and self inclusion
-			insertAdjListURL(M, url, urlBuffer);		
-		}
-		
+		insertAdjListNode(M, getValue(urlSet, count));
 		count++;
 	}
 	
-	
+	count = 0;
+	while (count < nElems(urlSet)){
+		url = strcat(getValue(urlSet, count),".txt");
+		FILE *fp;
+		fp = fopen(url, "r");
+		if (fp == NULL) break;
+		while (strstr(fgets(line, BUFFSIZE, fp), "Section-1") == NULL);
+		while (fscanf(fp, "%s", urlBuffer) != EOF){
+			if (strcmp(urlBuffer, "#end") == 0) break;
+			//remove .txt that was added from strcat
+			strtok(getValue(urlSet, count),".txt");
+			insertAdjListURL(M, urlBuffer, getValue(urlSet, count));		
+		}
+		count++;
+	}	
 	return M;
 }
 

@@ -23,13 +23,11 @@ int main(int argc, char **argv){
 	
 	Set urlSet;
 	urlSet = GetCollection();
-	
 	AdjList M;
 	M = buildList(urlSet);
 	showAdjList(M);
 	
-	
-	
+	if (argc != 4) return EXIT_FAILURE;
 	int d = atoi(argv[1]);
 	int diffPR = atoi(argv[2]);
 	int maxIter = atoi(argv[3]);
