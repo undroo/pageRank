@@ -1,5 +1,5 @@
-// set.c ... simple, inefficient Set of Strings
-// Written by John Shepherd, September 2015
+// setInt.c ... simple, inefficient Set of Ints
+// Based off code written by John Shepherd, September 2015
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,11 +24,13 @@ typedef struct SetIntRep {
 SetInt newSetInt();
 void disposeSetInt(SetInt);
 void insertIntoInt(SetInt,int);
+void insertAfterInt(SetInt, int, int);
 int  isElemInt(SetInt,int);
 int  nElemsInt(SetInt);
 void showSetInt(SetInt);
 int  getValueInt(SetInt,int);
 int  findNodeInt(SetInt,int);
+int  getInt(SetInt);
 
 static Link newNode(int);
 static void disposeNode(Link);
@@ -80,6 +82,25 @@ void insertIntoInt(SetInt s, int n)
 	}
 }
 
+// insertAfterInt(SetInt,int)
+// - insert number I into set after node containing N
+void insertAfterInt(SetInt s, int i, int n)
+{
+    Link curr = s->elems;
+    Link new = newNode(i);
+    s->nelems++;
+    
+    while (curr != NULL)
+    {
+        if (curr->val == n)
+        {
+            new->next = curr->next;
+            curr->next = new;
+        }
+        curr = curr->next;
+    }
+}
+
 // isElemInt(Set,n)
 // - check whether n is contained in Set
 int isElemInt(SetInt s, int n)
@@ -123,12 +144,12 @@ void showSetInt(SetInt s)
 }
 
 // getValueInt(SetInt,int)
-// - return the value of the nth node of the set
-// - return 0 if input N is not valid
+// - return value of nth element
 int getValueInt(SetInt s, int n)
 {
     if (n >= nElemsInt(s))
-    	return 0;
+    	    return 0;
+
     int i;
     Link curr = s->elems;
     for (i = 0; i < n; i++)
@@ -167,7 +188,7 @@ int  getInt(SetInt s)
         while (curr != NULL)
         {
             if (curr->val == i)
-	    	break;
+                break;
             else
                 curr = curr->next;
         }
