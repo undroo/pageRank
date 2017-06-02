@@ -35,6 +35,8 @@ int main(int argc, char **argv){
 	float **PR;
 	PR = pageRankArray(d, diffPR, maxIter, urlSet, M);
 	
+	printf("!!\n");
+	
 	disposeSet(urlSet);
 	free(urlSet);
 	
@@ -105,31 +107,30 @@ float **pageRankArray(int d, int diffPR, int maxIter, Set urlSet, AdjList M){
 	float diff = diffPR;
 	char *url;
 	
-	
+	//rows of urls, columns of pageRank
 	float **PR = (float **)malloc(sizeof(float *)*num);
 	for (countA = 0; countA < num; countA++){
 		PR[countA] = (float *)malloc(sizeof(float)*maxIter);
 	}
-	
 	
 	countA = 0;
 	while(countA < maxIter && diff >= diffPR){
 		countB = 0;
 		while(countB < num){
 			if (countA == 0){
-				PR[countA][countB] = 1/num;
+				printf("0\n");
+				PR[countB][countA] = 1/num;
 			} else {
+				//printf("!\n");
 				url = getValue(urlSet, countB);
-				PR[countA][countB] = pageRank(d, diffPR, maxIter, url, urlSet, M);
-				diff = calcDiffPR(url, M);
+				PR[countB][countA] = pageRank(d, diffPR, maxIter, url, urlSet, M);
+				//diff = calcDiffPR(url, M);
 			}
 			countB++;
 		}
 		countA++;
 	}
-	
-	
-	
+	//printf("%.6f\n", PR[0][0]);
 	return PR;
 }
 
@@ -140,6 +141,9 @@ float calcDiffPR(char *url, AdjList M){
 }
 
 float pageRank(int d, int diffPR, int maxIter, char *url, Set urlSet, AdjList M){
+	
+	
+	
 	
 	
 	return 0;
