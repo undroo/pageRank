@@ -16,5 +16,6 @@ int  nElemsInt(SetInt);
 void showSetInt(SetInt);
 int  getValueInt(SetInt,int);
 int  findNodeInt(SetInt,int);
+int  getInt(SetInt);
 
 #endif
