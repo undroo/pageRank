@@ -1,10 +1,12 @@
 #include "set.h"
 #include "adjlist.h"
+#include "setInt.h"
 
 #ifndef READDATA_H
 #define READDATA_H
 
 Set GetCollection();
-AdjList buildList(Set);
+AdjList buildM(Set);
+SetInt buildL(Set);
 
 #endif
