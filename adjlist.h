@@ -1,3 +1,5 @@
+#include "set.h"
+
 #ifndef ADJLIST_H
 #define ADJLIST_H
 
@@ -11,6 +13,7 @@ void insertAdjListURL(AdjList,char *,char *);
 int  inAdjList(AdjList,char *);
 int  nAdjList(AdjList);
 void showAdjList(FILE *,AdjList);
-Set getSet(AdjList,char *);
+int  findAdjListNode(AdjList,char *);
+Set  getSet(AdjList,int);
 
 #endif
