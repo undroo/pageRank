@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "set.h"
+#include "ReadData.h"
 
 #define BUFFSIZE 1024
 #define OUTSIZE 10
@@ -14,7 +15,6 @@
 
 Set isContain(Set);
 Set findDuplicate(Set);
-Set GetCollection();
 int assure(Set,Set);
 void printSearch(Set, Set, int);
 
@@ -234,21 +234,4 @@ void printSearch(Set urlList, Set terms, int totalN){
 	for (count = 0; count < nElems(terms) && count < OUTSIZE; count++){
 		printf("%s %.6f\n", getValue(urlList, order[count]), tdidf[order[count]]); 
 	}
-}
-
-Set GetCollection(){
-	FILE *fp;
-	fp = fopen("collection.txt", "r");
-	char urlBuffer[BUFFSIZE];
-	
-	Set urlSet;
-	urlSet = newSet();
-	
-	while (fscanf(fp, "%s", urlBuffer) != EOF){
-		insertInto(urlSet, urlBuffer);
-	}
-	
-	
-	fclose(fp);
-	return urlSet;
 }
