@@ -18,19 +18,9 @@ typedef struct AdjListRep {
     Item items;
 } AdjListRep;
 
-// Function signatures
-
-AdjList newAdjList();
-void disposeAdjList(AdjList);
-void insertAdjListNode(AdjList,char *);
-void insertAdjListURL(AdjList,char *,char *);
-int  inAdjList(AdjList,char *);
-int  nAdjList(AdjList);
-void showAdjList(AdjList);
-Set getSet(AdjList,char *);
-
 static Item newNode(char *);
 static int wordcmp(char *p, char *q);
+
 
 // newAdjList()
 // - create an initially empty Adjacency List
@@ -92,7 +82,7 @@ void insertAdjListNodeAlpha(AdjList al, char *str)
 	if (inAdjList(al,str)) return; 
 	
 	Item new = newNode(str);
-        al->nitems++;
+    al->nitems++;
 
 	if (al->items == NULL) // list is empty
 	    al->items = new;
@@ -179,17 +169,37 @@ void showAdjList(FILE * ptr, AdjList al)
 	}
 }
 
-Set getSet(AdjList al, char * w)
+// findAdjListNode(AdjList,char *)
+// - iterate through adjacency list until node containing S is found
+// - return index of node
+// - return -1 if node not found
+int  findAdjListNode(AdjList al,char * s)
 {
-    int i;
     Item curr = al->items;
-    for (i = 0; i < al->nitems; i++)
+    int n = 0;
+    
+    while (curr != NULL)
     {
-	if (!strcmp(curr->word,w))
-	    return curr->urls;
-	curr = curr->next;
+        if (!strcmp(curr->word,s))
+            return n;
+        n++;
+        curr = curr->next;
     }
-    return NULL;
+    return -1;
+}
+
+// getSet(AdjList,int)
+// - return Set in the nth node
+Set  getSet(AdjList al,int n)
+{
+    if (n > al->nitems) return NULL;
+    
+    Item curr = al->items;
+    int i;
+    for (i = 0; i < n; i++)
+        curr = curr->next;
+
+    return curr->urls;
 }
 
 
