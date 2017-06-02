@@ -50,6 +50,8 @@ SetInt newSetInt()
 // - clean up memory associated with Set
 void disposeSetInt(SetInt s)
 {
+	assert(s != NULL);
+
 	if (s == NULL) return;
 	Link next, curr = s->elems;
 	while (curr != NULL) {
@@ -66,13 +68,14 @@ void insertIntoInt(SetInt s, int n)
 	assert(s != NULL);
 	
 	Link new = newNode(n);
+	assert(new != NULL);
 	s->nelems++;
 	
 	if (s->elems == NULL)
 	    s->elems = new;
 	else
 	{
-	    	Link curr = s->elems, prev;
+	    Link curr = s->elems, prev;
 	    while(curr != NULL)
 	    {
 	        prev = curr;
@@ -86,6 +89,8 @@ void insertIntoInt(SetInt s, int n)
 // - insert number I into set after node containing N
 void insertAfterInt(SetInt s, int i, int n)
 {
+    assert(s != NULL);
+
     Link curr = s->elems;
     Link new = newNode(i);
     s->nelems++;
@@ -105,7 +110,7 @@ void insertAfterInt(SetInt s, int i, int n)
 // - check whether n is contained in Set
 int isElemInt(SetInt s, int n)
 {
-	assert(s != NULL);
+    assert(s != NULL);
 	
     Link curr = s->elems;
 	while (curr != NULL ) {
@@ -128,6 +133,8 @@ int  nElemsInt(SetInt s)
 // - display Set (for debugging)
 void showSetInt(SetInt s)
 {
+	assert(s != NULL);
+
 	Link curr;
 	if (s->nelems == 0)
 		printf("Set is empty\n");
@@ -147,9 +154,9 @@ void showSetInt(SetInt s)
 // - return value of nth element
 int getValueInt(SetInt s, int n)
 {
-    if (n >= nElemsInt(s))
-    	    return 0;
-
+    assert(s != NULL);
+    assert(n < nElemsInt(s));
+    
     int i;
     Link curr = s->elems;
     for (i = 0; i < n; i++)
@@ -163,6 +170,7 @@ int getValueInt(SetInt s, int n)
 // - return -1 if node not found
 int findNodeInt(SetInt s, int n)
 {
+    assert(s != NULL);
     Link curr = s->elems;
     int i = 0;
     while (curr != NULL)
@@ -181,6 +189,7 @@ int findNodeInt(SetInt s, int n)
 // - return 0 if all values are taken
 int  getInt(SetInt s)
 {
+    assert(s != NULL);
     int i;
     Link curr = s->elems;
     for (i = 1; i <= nElemsInt(s); i++)
